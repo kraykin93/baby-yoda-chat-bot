@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node app.js",
-    "dev": "BOT_TOKEN=1381834875:AAERNF1otR7vpicZ5rAoJPLbjLjDsnAmaiI nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "axios": "^0.20.0",
