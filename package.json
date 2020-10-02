@@ -4,7 +4,7 @@
   "description": "@BabyYodaChatBot Telegram",
   "main": "app.js",
   "scripts": {
-    "start": "BOT_TOKEN=1381834875:AAG_e1opycec5iocv_Vc3qh5jZvnTYMkAeE nodemon app.js"
+    "start": "nodemon app.js"
   },
   "author": "Vladimir Kraykin",
   "license": "ISC",
