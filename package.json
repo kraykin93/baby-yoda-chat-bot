@@ -2,8 +2,12 @@
   "name": "baby-yoda-chat-bot",
   "version": "1.0.0",
   "main": "app.js",
+  "engines": {
+    "node": "12.x"
+  },
   "scripts": {
-    "start": "nodemon app.js"
+    "start": "node app.js",
+    "dev": "nodemon app.js"
   },
   "dependencies": {
     "memejs": "^1.2.3",
