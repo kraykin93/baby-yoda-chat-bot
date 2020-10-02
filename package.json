@@ -7,11 +7,11 @@
   },
   "scripts": {
     "start": "node app.js",
-    "dev": "nodemon app.js"
+    "dev": "BOT_TOKEN=1381834875:AAERNF1otR7vpicZ5rAoJPLbjLjDsnAmaiI nodemon app.js"
   },
   "dependencies": {
+    "axios": "^0.20.0",
     "memejs": "^1.2.3",
-    "random-cat": "^1.0.1",
     "telegraf": "^3.38.0"
   },
   "devDependencies": {
