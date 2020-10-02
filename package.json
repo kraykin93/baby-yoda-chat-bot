@@ -1,0 +1,19 @@
+{
+  "name": "baby-yoda-chat-bot",
+  "version": "1.0.0",
+  "description": "@BabyYodaChatBot Telegram",
+  "main": "app.js",
+  "scripts": {
+    "start": "BOT_TOKEN=1381834875:AAG_e1opycec5iocv_Vc3qh5jZvnTYMkAeE nodemon app.js"
+  },
+  "author": "Vladimir Kraykin",
+  "license": "ISC",
+  "dependencies": {
+    "memejs": "^1.2.3",
+    "random-cat": "^1.0.1",
+    "telegraf": "^3.38.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
