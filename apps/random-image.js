@@ -3,8 +3,9 @@ const { memeAsync } = require('memejs')
 
 const sendRandomCat = async ({ replyWithPhoto }) => {
   try {
-    const { data } = await axios.get('https://api.thecatapi.com/v1/images/search')
-    replyWithPhoto({ url: data[0].url })
+    // const { data } = await axios.get('https://api.thecatapi.com/v1/images/search')
+    // const url = data[0].url
+    replyWithPhoto({ url: 'https://cataas.com/cat' })
   } catch (e) {
     console.error(e)
   }
