@@ -10,11 +10,10 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
-    "axios": "^0.20.0",
-    "memejs": "^1.2.3",
-    "telegraf": "^3.38.0"
+    "memejs": "^2.0.1",
+    "telegraf": "^4.7.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.15"
   }
 }

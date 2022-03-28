@@ -1,19 +1,16 @@
-const axios = require('axios')
 const { memeAsync } = require('memejs')
 
-const sendRandomCat = async ({ replyWithPhoto }) => {
+async function sendRandomCat(ctx) {
   try {
-    // const { data } = await axios.get('https://api.thecatapi.com/v1/images/search')
-    // const url = data[0].url
-    replyWithPhoto({ url: 'https://cataas.com/cat' })
+    ctx.replyWithPhoto({ url: 'https://cataas.com/cat' })
   } catch (e) {
     console.error(e)
   }
 }
 
-const sendRandomMeme = async ({ replyWithPhoto }) => {
+async function sendRandomMeme(ctx) {
   try {
-    replyWithPhoto(await memeAsync())
+    ctx.replyWithPhoto(await memeAsync())
   } catch (e) {
     console.error(e)
   }
