@@ -1,7 +1,3 @@
-function mapMessage(ctx) {
-
-}
-
 module.exports = {
   enable(bot) {
     bot.hears(/птн/i, (ctx) => {
