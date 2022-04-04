@@ -9,11 +9,5 @@ module.exports = {
     bot.hears(/кива/i, (ctx) => {
       ctx.reply('лох', { reply_to_message_id: ctx.message.message_id });
     })
-    bot.hears(/феделеш/i, (ctx) => {
-      ctx.reply('лох', { reply_to_message_id: ctx.message.message_id });
-    })
-    bot.hears(/артем/i, (ctx) => {
-      ctx.reply('Арсен', { reply_to_message_id: ctx.message.message_id });
-    })
   }
 }
