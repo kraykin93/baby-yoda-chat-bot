@@ -7,7 +7,7 @@ module.exports = {
       ctx.reply('хуйло', { reply_to_message_id: ctx.message.message_id });
     })
     bot.hears(/кива/i, (ctx) => {
-      ctx.reply('лох', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('уебан', { reply_to_message_id: ctx.message.message_id });
     })
   }
 }
