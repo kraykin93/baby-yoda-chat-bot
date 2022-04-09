@@ -6,6 +6,9 @@ module.exports = {
     bot.hears(/путин/i, (ctx) => {
       ctx.reply('путин хуйло!\nла-ла-ла-ла-ла-ла-ла-ла!', { reply_to_message_id: ctx.message.message_id });
     })
+    bot.hears(/жириновский/i, (ctx) => {
+      ctx.reply('земля стекловатой', { reply_to_message_id: ctx.message.message_id });
+    })
     bot.hears(/кива/i, (ctx) => {
       ctx.reply('уебан', { reply_to_message_id: ctx.message.message_id });
     })
