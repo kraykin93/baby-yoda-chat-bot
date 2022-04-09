@@ -5,10 +5,10 @@ const client = new Client({
   ssl: {
     rejectUnauthorized: false,
   },
-})
+});
 
 client.connect();
 
 module.exports = {
   client,
-}
+};

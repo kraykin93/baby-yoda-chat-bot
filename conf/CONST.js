@@ -23,4 +23,4 @@ module.exports = {
     name: 'край',
     record: 'kray',
   },
-}
+};
