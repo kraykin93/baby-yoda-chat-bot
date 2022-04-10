@@ -1,6 +1,7 @@
 const { Telegraf } = require('telegraf');
-const randomImageApp = require('./apps/random-image');
 const offence = require('./apps/offence');
+const pidorating = require('./apps/pidorating');
+const randomImageApp = require('./apps/random-image');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.start(({ reply }) => reply('May the Force be with you!'));
@@ -12,7 +13,8 @@ bot.on('new_chat_members', (ctx) => {
   });
 });
 
-randomImageApp.enable(bot);
 offence.enable(bot);
+pidorating.enable(bot);
+randomImageApp.enable(bot);
 
 bot.launch();
