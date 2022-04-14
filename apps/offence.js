@@ -10,7 +10,7 @@ module.exports = {
       ctx.reply('земля стекловатой', { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/песков/i, (ctx) => {
-      ctx.reply('ебанат совсем запизделся', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('этот ебанат совсем запизделся', { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/лукашенко/i, (ctx) => {
       ctx.reply('А я сейчас вам покажу, откуда на Беларусь готовилось нападение...', { reply_to_message_id: ctx.message.message_id });
