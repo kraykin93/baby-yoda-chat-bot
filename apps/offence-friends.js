@@ -22,5 +22,10 @@ module.exports = {
     bot.hears(/толя/i, (ctx) => {
       ctx.reply('красава капитан', { reply_to_message_id: ctx.message.message_id });
     });
+    bot.hears(/край/i, (ctx) => {
+      const msgs = ['хуй вонючий', 'феделеш, или на хуй'];
+      const i = Math.floor(Math.random() * msgs.length);
+      ctx.reply(msgs[i], { reply_to_message_id: ctx.message.message_id });
+    });
   },
 };
