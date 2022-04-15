@@ -1,5 +1,6 @@
 const { Telegraf } = require('telegraf');
 const offence = require('./apps/offence');
+const offenceFriends = require('./apps/offence-friends');
 const pidorating = require('./apps/pidorating');
 const randomImageApp = require('./apps/random-image');
 
@@ -14,6 +15,7 @@ bot.on('new_chat_members', (ctx) => {
 });
 
 offence.enable(bot);
+offenceFriends.enable(bot);
 pidorating.enable(bot);
 randomImageApp.enable(bot);
 
