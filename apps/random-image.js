@@ -1,6 +1,6 @@
 const { memeAsync } = require('memejs');
 
-async function sendRandomCat(ctx) {
+function sendRandomCat(ctx) {
   try {
     ctx.replyWithPhoto({ url: 'https://cataas.com/cat' });
   } catch (e) {

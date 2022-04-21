@@ -17,7 +17,7 @@ module.exports = {
       ctx.reply(msgs[i], { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/юра/i, (ctx) => {
-      ctx.reply('/юра красава ветеран', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('юра красава ветеран', { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/толя/i, (ctx) => {
       ctx.reply('толя красава капитан', { reply_to_message_id: ctx.message.message_id });

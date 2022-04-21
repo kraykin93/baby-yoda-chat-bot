@@ -13,7 +13,7 @@ module.exports = {
       ctx.reply('этот ебанат совсем запизделся', { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/медведев/i, (ctx) => {
-      ctx.reply('денег нет! но вы (терпилы) держитесь!', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('денег нет! но вы держитесь!', { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/лукашенко/i, (ctx) => {
       ctx.replyWithPhoto({ source: 'assets/img/usach.png' }, { reply_to_message_id: ctx.message.message_id });
