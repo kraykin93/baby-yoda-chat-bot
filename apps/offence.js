@@ -4,7 +4,7 @@ module.exports = {
       ctx.reply('пнх', { reply_to_message_id: ctx.message.message_id });
     });
     bot.on(['text', 'caption'], (ctx) => {
-      const text = ctx.message.text || ctx.message.text;
+      const text = ctx.message.text || ctx.message.caption;
       if (/путин/i.test(text)) {
         ctx.reply('путин хуйло!\nла-ла-ла-ла-ла-ла-ла-ла!', { reply_to_message_id: ctx.message.message_id });
       }
