@@ -10,6 +10,7 @@
     "dev": "nodemon app.js"
   },
   "dependencies": {
+    "chance": "^1.1.8",
     "memejs": "^2.0.1",
     "pg": "^8.7.3",
     "telegraf": "^4.7.0"

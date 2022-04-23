@@ -1,6 +1,6 @@
 const { memeAsync } = require('memejs');
 
-function sendRandomCat(ctx) {
+function onRandomCat(ctx) {
   try {
     ctx.replyWithPhoto({ url: 'https://cataas.com/cat' });
   } catch (e) {
@@ -8,7 +8,7 @@ function sendRandomCat(ctx) {
   }
 }
 
-async function sendRandomMeme(ctx) {
+async function onRandomMeme(ctx) {
   try {
     ctx.replyWithPhoto(await memeAsync());
   } catch (e) {
@@ -16,9 +16,7 @@ async function sendRandomMeme(ctx) {
   }
 }
 
-module.exports = {
-  enable(bot) {
-    bot.command('cat', sendRandomCat);
-    bot.command('meme', sendRandomMeme);
-  },
+module.exports = (bot) => {
+  bot.command('cat', onRandomCat);
+  bot.command('meme', onRandomMeme);
 };

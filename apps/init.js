@@ -9,9 +9,7 @@ function onNewChatMember(ctx) {
   });
 }
 
-module.exports = {
-  enable(bot) {
-    bot.start(onStart);
-    bot.on('new_chat_members', onNewChatMember);
-  },
+module.exports = (bot) => {
+  bot.start(onStart);
+  bot.on('new_chat_members', onNewChatMember);
 };
