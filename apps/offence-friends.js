@@ -3,7 +3,7 @@ const { client: db } = require('../db/db');
 
 async function onFedelesh(ctx, next) {
   const { rows } = await db.query(`UPDATE public.rating SET counter = counter + 1 WHERE name = 'феделеш' RETURNING counter;`);
-  ctx.reply(`ф пидор уже ${rows[0].counter - 1} раз(а) и еще +1`, { reply_to_message_id: ctx.message.message_id });
+  ctx.reply(`ф пидор уже ${rows[0].counter - 1} раз(а) и еще + 1`, { reply_to_message_id: ctx.message.message_id });
   next();
 }
 
