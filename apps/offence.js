@@ -19,7 +19,7 @@ module.exports = {
       ctx.replyWithPhoto({ source: 'assets/img/usach.png' }, { reply_to_message_id: ctx.message.message_id });
     });
     bot.hears(/кива/i, (ctx) => {
-      ctx.reply('уебан', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('кива уебан', { reply_to_message_id: ctx.message.message_id });
     });
   },
 };
