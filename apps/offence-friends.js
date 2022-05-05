@@ -38,6 +38,11 @@ function onKray(ctx, next) {
   next();
 }
 
+function onKim(ctx, next) {
+  ctx.reply('Доброго вечора ми з України', { reply_to_message_id: ctx.message.message_id });
+  next();
+}
+
 module.exports = (bot) => {
   bot.hears(/феделеш/i, onFedelesh);
   bot.hears(/артем|артём/i, onArtem);
@@ -45,4 +50,5 @@ module.exports = (bot) => {
   bot.hears(/юра/i, onYura);
   bot.hears(/толя/i, onTolya);
   bot.hears(/край/i, onKray);
+  bot.hears(/ким/i, onKim);
 };

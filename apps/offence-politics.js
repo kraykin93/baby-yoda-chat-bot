@@ -23,6 +23,9 @@ function onPoliticianName(ctx, next) {
   if (/кива/i.test(text)) {
     ctx.reply('кива уебан', { reply_to_message_id: ctx.message.message_id });
   }
+  if (/орбан/i.test(text)) {
+    ctx.reply('орбан хуербан о курва оняд те луфос бозмек блять', { reply_to_message_id: ctx.message.message_id });
+  }
   next();
 }
 
