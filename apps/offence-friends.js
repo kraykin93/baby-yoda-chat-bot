@@ -50,5 +50,5 @@ module.exports = (bot) => {
   bot.hears(/юра/i, onYura);
   bot.hears(/толя/i, onTolya);
   bot.hears(/край/i, onKray);
-  bot.hears(/300|триста|тристо/i, onKray);
+  bot.hears(/300|триста|тристо/i, on300);
 };
