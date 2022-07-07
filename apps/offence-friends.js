@@ -38,6 +38,11 @@ function onKray(ctx, next) {
   next();
 }
 
+function on300(ctx, next) {
+  ctx.reply('отсоси у тракториста', { reply_to_message_id: ctx.message.message_id });
+  next();
+}
+
 module.exports = (bot) => {
   bot.hears(/феделеш/i, onFedelesh);
   bot.hears(/артем|артём/i, onArtem);
@@ -45,4 +50,5 @@ module.exports = (bot) => {
   bot.hears(/юра/i, onYura);
   bot.hears(/толя/i, onTolya);
   bot.hears(/край/i, onKray);
+  bot.hears(/300|триста|тристо/i, onKray);
 };
