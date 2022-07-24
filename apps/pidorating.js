@@ -38,7 +38,7 @@ async function onLastPidor(ctx) {
 }
 
 module.exports = (bot) => {
-  bot.hears(/кто пидар|кто пидор/i, onWhoPidor);
+  bot.hears(/кто пидар|кто пидор|кто пидрила|кто пидорас/i, onWhoPidor);
   bot.command('pidorating', onPidorating);
   bot.command('pidoduration', onPidoduration);
   bot.command('lastpidor', onLastPidor);
