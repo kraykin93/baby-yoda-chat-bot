@@ -23,7 +23,7 @@ async function onPidorDuration(ctx) {
   const { rows: persons } = await db.query('SELECT * FROM public.rating;');
   const msg = persons
     .sort((a, b) => b.duration - a.duration)
-    .reduce((prev, current) => prev.concat('\n', `${current.name}: ${parseDays(current.duration)}`), '');
+    .reduce((prev, current) => prev.concat('\n', `${current.name}:${parseDays(current.duration)}`), '');
   ctx.reply(msg);
 }
 
