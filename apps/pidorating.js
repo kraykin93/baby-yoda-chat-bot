@@ -1,4 +1,3 @@
-const moment = require('moment');
 const chance = require('chance').Chance();
 const { client: db } = require('../db/db');
 const { parseDays } = require('../utils');
