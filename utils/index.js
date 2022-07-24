@@ -1,9 +1,12 @@
-function parseDays(moment) {
+const moment = require('moment');
+
+function parseDays(diff) {
+  const m = new moment.duration(diff);
   let str = '';
-  const days = Math.floor(moment.days());
-  const hours = Math.floor(moment.hours());
-  const minutes = Math.floor(moment.minutes());
-  const seconds = Math.floor(moment.seconds());
+  const days = Math.floor(m.days());
+  const hours = Math.floor(m.hours());
+  const minutes = Math.floor(m.minutes());
+  const seconds = Math.floor(m.seconds());
 
   if (days) {
     if (days === 1) {
@@ -26,23 +29,11 @@ function parseDays(moment) {
   }
 
   if (minutes) {
-    if (minutes === 1) {
-      str = str.concat(` ${minutes} минуту`);
-    } else if (minutes === 2 || minutes === 3 || minutes === 4) {
-      str = str.concat(` ${minutes} минуты`);
-    } else {
-      str = str.concat(` ${minutes} минут`);
-    }
+    str = str.concat(` ${minutes} мин`);
   }
 
   if (seconds) {
-    if (seconds === 1) {
-      str = str.concat(` ${seconds} секунду`);
-    } else if (seconds === 2 || seconds === 3 || seconds === 4) {
-      str = str.concat(` ${seconds} секунды`);
-    } else {
-      str = str.concat(` ${seconds} секунд`);
-    }
+    str = str.concat(` ${seconds} сек`);
   }
 
   return str;

@@ -12,10 +12,18 @@ async function onWhoPidor(ctx) {
 }
 
 async function onPidorating(ctx) {
-  const { rows: names } = await db.query('SELECT * FROM public.rating;');
-  const msg = names
+  const { rows: persons } = await db.query('SELECT * FROM public.rating;');
+  const msg = persons
     .sort((a, b) => b.counter - a.counter)
     .reduce((prev, current) => prev.concat('\n', `${current.name}: ${current.counter}`), '');
+  ctx.reply(msg);
+}
+
+async function onPidoduration(ctx) {
+  const { rows: persons } = await db.query('SELECT * FROM public.rating;');
+  const msg = persons
+    .sort((a, b) => b.duration - a.duration)
+    .reduce((prev, current) => prev.concat('\n', `${current.name}: ${parseDays(current.duration)}`), '');
   ctx.reply(msg);
 }
 
@@ -26,12 +34,12 @@ async function onLastPidor(ctx) {
   if (duration[0].duration < diff) {
     await db.query(`UPDATE public.rating SET duration = ${diff} WHERE name = '${rows[0].name}';`);
   }
-  const m = new moment.duration(diff);
-  ctx.reply(`*${rows[0].name}* удостоен быть пидором уже${parseDays(m)}`, { parse_mode: 'MarkdownV2' });
+  ctx.reply(`*${rows[0].name}* удостоен быть пидором уже${parseDays(diff)}`, { parse_mode: 'MarkdownV2' });
 }
 
 module.exports = (bot) => {
   bot.hears(/кто пидар|кто пидор/i, onWhoPidor);
   bot.command('pidorating', onPidorating);
+  bot.command('pidoduration', onPidoduration);
   bot.command('lastpidor', onLastPidor);
 };
