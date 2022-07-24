@@ -21,7 +21,7 @@ async function onPidorating(ctx) {
 async function onLastPidor(ctx) {
   const { rows } = await db.query('SELECT * FROM public.last;');
   const diff = new moment.duration(Date.now() - Number(rows[0].date));
-  ctx.reply(`*${rows[0].name}* удостоен быть пидором уже ${Math.floor(diff.asDays())} дней, ${Math.floor(diff.asHours())} часов, ${Math.floor(diff.asMinutes())} минут`, { parse_mode: "MarkdownV2" });
+  ctx.reply(`*${rows[0].name}* удостоен быть пидором уже ${Math.floor(diff.asDays())} дней, ${Math.floor(diff.asHours())} часов, ${Math.floor(diff.asMinutes())} минут, ${Math.floor(diff.asSeconds())} секунд`, { parse_mode: "MarkdownV2" });
 }
 
 module.exports = (bot) => {
