@@ -48,6 +48,11 @@ function onNo(ctx, next) {
   next();
 }
 
+function onA(ctx, next) {
+  ctx.reply('хуй на', { reply_to_message_id: ctx.message.message_id });
+  next();
+}
+
 module.exports = (bot) => {
   bot.hears(/феделеш/i, onFedelesh);
   bot.hears(/артем|артём/i, onArtem);
@@ -56,5 +61,6 @@ module.exports = (bot) => {
   bot.hears(/толя/i, onTolya);
   bot.hears(/край/i, onKray);
   bot.hears(/300|триста|тристо/i, on300);
-  bot.hears('нет', onNo);
+  bot.hears(/нет/, onNo);
+  bot.hears(/а|аа|ааа|аааа|ааааа|аааааа|ааааааа/, onA);
 };
