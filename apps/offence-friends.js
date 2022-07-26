@@ -61,6 +61,6 @@ module.exports = (bot) => {
   bot.hears(/толя/i, onTolya);
   bot.hears(/край/i, onKray);
   bot.hears(/300|триста|тристо/i, on300);
-  bot.hears(/нет/, onNo);
-  bot.hears(/а|аа|ааа|аааа|ааааа|аааааа|ааааааа/, onA);
+  // bot.hears(/нет/, onNo);
+  // bot.hears(/а|аа|ааа|аааа|ааааа|аааааа|ааааааа/, onA);
 };
