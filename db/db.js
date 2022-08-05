@@ -1,4 +1,5 @@
-const { Client } = require('pg');
+const { Client, types } = require('pg');
+types.setTypeParser(20, BigInt); // Type Id 20 = BIGINT | BIGSERIAL
 
 const client = new Client({
   connectionString: process.env.DATABASE_URL,

@@ -1,9 +1,9 @@
 const { Telegraf } = require('telegraf');
-const init = require('./apps/init');
-const offenceFriends = require('./apps/offence-friends');
-const offencePolitics = require('./apps/offence-politics');
-const pidorating = require('./apps/pidorating');
-const randomImageApp = require('./apps/random-image');
+const init = require('./controllers/init');
+const offenceFriends = require('./controllers/offence-friends');
+const offencePolitics = require('./controllers/offence-politics');
+const pidorating = require('./controllers/pidorating');
+const randomImageApp = require('./controllers/random-image');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 

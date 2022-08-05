@@ -8,6 +8,8 @@ function parseDays(diff) {
   const minutes = Math.floor(m.minutes());
   const seconds = Math.floor(m.seconds());
 
+  // str = ` ${days} ${hours}:${minutes}:${seconds}`
+
   if (days) {
     if (days === 1) {
       str = str.concat(` ${days} день`);
@@ -19,13 +21,7 @@ function parseDays(diff) {
   }
 
   if (hours) {
-    if (hours === 1) {
-      str = str.concat(` ${hours} час`);
-    } else if (hours === 2 || hours === 3 || hours === 4) {
-      str = str.concat(` ${hours} часа`);
-    } else {
-      str = str.concat(` ${hours} часов`);
-    }
+    str = str.concat(` ${hours} час`);
   }
 
   if (minutes) {
