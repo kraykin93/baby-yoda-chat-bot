@@ -13,7 +13,7 @@ async function onWhoPidor(ctx) {
 
 async function onPidorRating(ctx) {
   const pidors = await model.getAllPidors();
-  const msg = pidors
+  const msg = '__Рейтинг__' + pidors
     .sort((a, b) => b.counter - a.counter)
     .reduce((prev, current) => prev.concat('\n', `*${current.name}*: ${current.counter}`), '');
   ctx.reply(msg, { parse_mode: 'MarkdownV2' });
