@@ -11,6 +11,10 @@ async function onWhoPidor(ctx) {
   await model.updateLastPidor(pidors[i].name);
 }
 
+async function onBotPidor(ctx) {
+  ctx.reply('сам пидор', { reply_to_message_id: ctx.message.message_id });
+}
+
 async function onPidorRating(ctx) {
   const pidors = await model.getAllPidors();
   const msg = '__Рейтинг__' + pidors
@@ -65,6 +69,7 @@ async function syncPidorDurations({ updateTotal } = {}) {
 
 module.exports = (bot) => {
   bot.hears(/кто пидар|кто пидор|кто пидрила|кто пидорас/i, onWhoPidor);
+  bot.hears(/бот пидар|пидар бот/i, onBotPidor);
   bot.command('pedo_rating', onPidorRating);
   bot.command('pedo_last', onLastPidor);
   bot.command('pedo_record_duration', onPidorRecordDuration);
