@@ -68,7 +68,7 @@ async function syncPidorDurations({ updateTotal } = {}) {
 }
 
 module.exports = (bot) => {
-  bot.hears(/кто пидар|кто пидор|кто пидрила|кто пидорас/i, onWhoPidor);
+  bot.hears(/кто пидар|кто пидор|кто пидрила/i, onWhoPidor);
   bot.hears(/бот пидар|пидар бот/i, onBotPidor);
   bot.command('pedo_rating', onPidorRating);
   bot.command('pedo_last', onLastPidor);
