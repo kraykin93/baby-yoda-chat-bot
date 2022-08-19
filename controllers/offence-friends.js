@@ -53,6 +53,10 @@ function onA(ctx, next) {
   next();
 }
 
+function onWhoRat(ctx) {
+  ctx.reply('феделеш крыса', { reply_to_message_id: ctx.message.message_id });
+}
+
 module.exports = (bot) => {
   bot.hears(/феделеш/i, onFedelesh);
   bot.hears(/артем|артём/i, onArtem);
@@ -63,4 +67,5 @@ module.exports = (bot) => {
   bot.hears(/300|триста|тристо/i, on300);
   bot.hears(/(?<![\u0400-\u04ff])нет(?![\u0400-\u04ff])/img, onNo);
   bot.hears(/^а+$/img, onA);
+  bot.hears(/кто крыса/i, onWhoRat);
 };
