@@ -4,7 +4,7 @@ const { parseDays } = require('../utils');
 
 async function onWhoPidor(ctx) {
   const { id } = await model.getLastPidor();
-  if (id === BigInt(ctx.message.from.id)) {
+  if (id == BigInt(ctx.message.from.id)) {
     const pidors = await model.getAllPidors();
     const i = chance.integer({ min: 0, max: pidors.length - 1 });
     ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
