@@ -14,8 +14,8 @@ async function getLastPidor() {
   return rows[0];
 }
 
-async function updateLastPidor(name) {
-  await db.query(`UPDATE public.last SET name = '${name}', start_date = '${Date.now()}';`);
+async function updateLastPidor(name, id) {
+  await db.query(`UPDATE public.last SET id = '${id}', name = '${name}', start_date = '${Date.now()}';`);
 }
 
 async function updateRecordPidorDuration(name, time) {
