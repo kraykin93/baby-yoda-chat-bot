@@ -4,16 +4,16 @@ const { parseDays } = require('../utils');
 
 async function onWhoPidor(ctx) {
   const { id } = await model.getLastPidor();
-  if (id === BigInt(ctx.message.from.id)) {
+  if (id !== BigInt(ctx.message.from.id) && chance.bool({ likelihood: 50 })) {
+    await model.updateTotalPidorDuration(ctx.message.from.id, 3600000);
+    ctx.reply('ты не последний пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
+  } else {
     const pidors = await model.getAllPidors();
     const i = chance.integer({ min: 0, max: pidors.length - 1 });
     ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
     await syncPidorDurations({ updateTotal: true });
     await model.updatePidorCounter(pidors[i].name);
     await model.updateLastPidor(pidors[i].name, pidors[i].id);
-  } else {
-    await model.updateTotalPidorDuration(ctx.message.from.id, 3600000);
-    ctx.reply('ты не последний пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
   }
 }
 
