@@ -26,6 +26,9 @@ function onPoliticianName(ctx, next) {
   if (/орбан/i.test(text)) {
     ctx.reply('орбан хуербан о курва оняд те луфос бозмек блять', { reply_to_message_id: ctx.message.message_id });
   }
+  if (/шойгу/i.test(text)) {
+    ctx.reply('разве шойгу подстилка не сдохла от инфаркта?', { reply_to_message_id: ctx.message.message_id });
+  }
   next();
 }
 
