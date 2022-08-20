@@ -1,5 +1,6 @@
 const chance = require('chance').Chance();
 const { client: db } = require('../db/db');
+const model = require('../models/pidorating');
 
 async function onFedelesh(ctx, next) {
   const { rows } = await db.query(`UPDATE public.rating SET counter = counter + 1 WHERE name = 'феделеш' RETURNING counter;`);
@@ -53,8 +54,12 @@ function onA(ctx, next) {
   next();
 }
 
-function onWhoRat(ctx) {
-  ctx.reply('феделеш крыса', { reply_to_message_id: ctx.message.message_id });
+async function onWhoRat(ctx) {
+  let name = 'феделеш';
+  if (chance.bool({ likelihood: 10 })) {
+    name = ['саня', 'юра', 'артем', 'край', 'толя'][chance.integer({ min: 0, max: 4 })];
+  }
+  ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
 }
 
 module.exports = (bot) => {
