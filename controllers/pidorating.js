@@ -3,12 +3,18 @@ const model = require('../models/pidorating');
 const { parseDays } = require('../utils');
 
 async function onWhoPidor(ctx) {
-  const pidors = await model.getAllPidors();
-  const i = chance.integer({ min: 0, max: pidors.length - 1 });
-  ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
-  await syncPidorDurations({ updateTotal: true });
-  await model.updatePidorCounter(pidors[i].name);
-  await model.updateLastPidor(pidors[i].name, pidors[i].id);
+  const { id } = await model.getLastPidor();
+  if (id === BigInt(ctx.message.from.id)) {
+    const pidors = await model.getAllPidors();
+    const i = chance.integer({ min: 0, max: pidors.length - 1 });
+    ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
+    await syncPidorDurations({ updateTotal: true });
+    await model.updatePidorCounter(pidors[i].name);
+    await model.updateLastPidor(pidors[i].name, pidors[i].id);
+  } else {
+    await model.updateTotalPidorDuration(ctx.message.from.id, 3600000);
+    ctx.reply('ты не последний пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
+  }
 }
 
 async function onBotPidor(ctx) {
@@ -53,15 +59,15 @@ async function onLastPidor(ctx) {
 }
 
 async function syncPidorDurations({ updateTotal } = {}) {
-  const { name, start_date, record_duration, total_duration } = await model.getLastPidor();
+  const { id, name, start_date, record_duration } = await model.getLastPidor();
   const currentDuration = BigInt(Date.now()) - start_date;
 
   if (record_duration < currentDuration) {
-    await model.updateRecordPidorDuration(name, currentDuration);
+    await model.updateRecordPidorDuration(id, currentDuration);
   }
 
   if (updateTotal) {
-    await model.updateTotalPidorDuration(name, total_duration + currentDuration);
+    await model.updateTotalPidorDuration(id, currentDuration);
   }
 
   return { name, currentDuration };

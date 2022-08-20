@@ -18,12 +18,12 @@ async function updateLastPidor(name, id) {
   await db.query(`UPDATE public.last SET id = '${id}', name = '${name}', start_date = '${Date.now()}';`);
 }
 
-async function updateRecordPidorDuration(name, time) {
-  await db.query(`UPDATE public.rating SET record_duration = ${time} WHERE name = '${name}';`);
+async function updateRecordPidorDuration(id, time) {
+  await db.query(`UPDATE public.rating SET record_duration = ${time} WHERE id = '${id}';`);
 }
 
-async function updateTotalPidorDuration(name, time) {
-  await db.query(`UPDATE public.rating SET total_duration = ${time} WHERE name = '${name}';`);
+async function updateTotalPidorDuration(id, time) {
+  await db.query(`UPDATE public.rating SET total_duration = total_duration + ${time} WHERE id = '${id}';`);
 }
 
 module.exports = {
