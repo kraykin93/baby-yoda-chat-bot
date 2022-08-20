@@ -3,13 +3,12 @@ const model = require('../models/pidorating');
 const { parseDays } = require('../utils');
 
 async function onWhoPidor(ctx) {
-  console.log(ctx.message.from);
   const pidors = await model.getAllPidors();
   const i = chance.integer({ min: 0, max: pidors.length - 1 });
   ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
   await syncPidorDurations({ updateTotal: true });
   await model.updatePidorCounter(pidors[i].name);
-  await model.updateLastPidor(pidors[i].name, ctx.message.from.id);
+  await model.updateLastPidor(pidors[i].name, pidors[i].id);
 }
 
 async function onBotPidor(ctx) {
