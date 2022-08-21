@@ -9,13 +9,17 @@ async function updatePidorCounter(name) {
   await db.query(`UPDATE public.rating SET counter = counter + 1 WHERE name = '${name}';`);
 }
 
-async function getLastPidor() {
-  const { rows } = await db.query('SELECT * FROM public.last INNER JOIN public.rating ON public.last.name=public.rating.name;');
+async function updatePidorSaves(id) {
+  await db.query(`UPDATE public.rating SET saves = saves + 1 WHERE name = '${id}';`);
+}
+
+async function getCurrentPidor() {
+  const { rows } = await db.query('SELECT * FROM public.current INNER JOIN public.rating ON public.current.name=public.rating.name;');
   return rows[0];
 }
 
-async function updateLastPidor(name, id) {
-  await db.query(`UPDATE public.last SET id = '${id}', name = '${name}', start_date = '${Date.now()}';`);
+async function updateCurrentPidor(name, id) {
+  await db.query(`UPDATE public.current SET id = '${id}', name = '${name}', start_date = '${Date.now()}';`);
 }
 
 async function updateRecordPidorDuration(id, time) {
@@ -29,8 +33,9 @@ async function updateTotalPidorDuration(id, time) {
 module.exports = {
   getAllPidors,
   updatePidorCounter,
-  updateLastPidor,
-  getLastPidor,
+  updatePidorSaves,
+  updateCurrentPidor,
+  getCurrentPidor,
   updateRecordPidorDuration,
   updateTotalPidorDuration,
 };
