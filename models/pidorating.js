@@ -10,7 +10,7 @@ async function updatePidorCounter(name) {
 }
 
 async function updatePidorSaves(id) {
-  await db.query(`UPDATE public.rating SET saves = saves + 1 WHERE name = '${id}';`);
+  await db.query(`UPDATE public.rating SET saves = saves + 1 WHERE id = '${id}';`);
 }
 
 async function getCurrentPidor() {
