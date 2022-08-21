@@ -86,9 +86,15 @@ async function syncPidorDurations({ updateTotal } = {}) {
 }
 
 async function onWhoRat(ctx) {
-  let name = 'феделеш';
-  if (chance.bool({ likelihood: 10 })) {
-    name = ['саня', 'юра', 'артем', 'край', 'толя'][chance.integer({ min: 0, max: 4 })];
+  let pidors = await model.getAllPidors();
+  pidors = pidors.sort((a, b) => b.saves - a.saves);
+  let name = 'ты крыса';
+  if (chance.bool({ likelihood: 75 })) {
+    name = pidors[chance.integer({ min: 4, max: 5 })].name;
+  } else if (chance.bool({ likelihood: 50 })) {
+    name = pidors[chance.integer({ min: 1, max: 3 })].name;
+  } else if (chance.bool({ likelihood: 25 })) {
+    name = pidors[0].name;
   }
   ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
 }
