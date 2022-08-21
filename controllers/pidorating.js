@@ -85,9 +85,18 @@ async function syncPidorDurations({ updateTotal } = {}) {
   return { name, currentDuration };
 }
 
+async function onWhoRat(ctx) {
+  let name = 'феделеш';
+  if (chance.bool({ likelihood: 10 })) {
+    name = ['саня', 'юра', 'артем', 'край', 'толя'][chance.integer({ min: 0, max: 4 })];
+  }
+  ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
+}
+
 module.exports = (bot) => {
-  bot.hears(/кто пидар|кто пидор|кто пидрила/i, onWhoPidor);
+  bot.hears(/кто пидар|кто пидор|кто пидрила|кто педор/i, onWhoPidor);
   bot.hears(/бот пидар|пидар бот/i, onBotPidor);
+  bot.hears(/кто крыса/i, onWhoRat);
   bot.command('pedo_current', onCurrentPidor);
   bot.command('pedo_rating', onPidorRating);
   bot.command('pedo_total_duration', onPidorTotalDuration);
