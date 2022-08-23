@@ -98,7 +98,7 @@ async function onSpendSavesAction(ctx) {
 
   if (callerId !== keyboardOwnerId) {
     ctx.reply(
-      `<b>${callerName}</>, ${CONST.offenceMessages[chance.integer({ min: 0, max: CONST.offenceMessages.length - 1 })]}`,
+      `<b>${callerName}</>, это не твои кнопки. ${CONST.offenceMessages[chance.integer({ min: 0, max: CONST.offenceMessages.length - 1 })]}`,
       { parse_mode: 'HTML' },
     );
   } else {
