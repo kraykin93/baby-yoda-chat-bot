@@ -1,3 +1,4 @@
+const { Markup } = require('telegraf');
 const chance = require('chance').Chance();
 const model = require('../models/pidorating');
 const { parseDays } = require('../utils');
@@ -19,8 +20,8 @@ async function onWhoPidor(ctx) {
   const i = chance.integer({ min: 0, max: pidors.length - 1 });
   ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
   await syncPidorDurations({ updateTotal: true });
-  await model.increasePidorCounter(pidors[i].name);
-  await model.updateCurrentPidor(pidors[i].name, pidors[i].id);
+  await model.increasePidorCounter(pidors[i].id);
+  await model.updateCurrentPidor(pidors[i].id);
 }
 
 async function onWhoRat(ctx) {
@@ -60,6 +61,34 @@ async function onPidorSaves(ctx) {
     .sort((a, b) => b.saves - a.saves)
     .reduce((prev, current) => prev.concat('\n', `*${current.name}*: ${current.saves}`), '');
   ctx.reply(msg, { parse_mode: 'MarkdownV2' });
+}
+
+async function onSpendSaves(ctx) {
+  const calledId = ctx.message.from.id;
+  const pidors = await model.getAllPidors();
+  const { name } = pidors.find(p => p.id === BigInt(calledId));
+  const buttons = pidors
+    .filter(p => p.id !== BigInt(calledId))
+    .map(p => Markup.button.callback(p.name, `pedo_spend_saves ${calledId} ${p.id} ${p.name}`));
+
+  ctx.reply(`${name} хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
+    Markup
+      .inlineKeyboard(buttons, { columns: 2 }),
+  );
+}
+
+async function onSpendSavesAction(ctx) {
+  const callerId = ctx.from.id;
+  const keyboardOwner = Number(ctx.match[1]);
+  const pidorId = Number(ctx.match[2]);
+  const pidorName = ctx.match[3];
+
+  if (callerId !== keyboardOwner) {
+    const msg = ['чмо', 'уебан', 'хуесос', 'долбоеб'];
+    ctx.answerCbQuery(`это не твои кнопки, ${msg[chance.integer({ min: 1, max: msg.length - 1 })]}`);
+  } else {
+    ctx.reply(`${pidorName} возможно получил бы час если бы эта фича работала`, { parse_mode: 'MarkdownV2' });
+  }
 }
 
 async function onPidorRecordDuration(ctx) {
@@ -107,7 +136,9 @@ module.exports = (bot) => {
   bot.hears(/бот пидар|пидар бот/i, onBotPidor);
   bot.command('pedo_current', onCurrentPidor);
   bot.command('pedo_rating', onPidorRating);
-  bot.command('pedo_total_duration', onPidorTotalDuration);
   bot.command('pedo_saves', onPidorSaves);
+  bot.command('pedo_spend_saves', onSpendSaves);
+  bot.action(/pedo_spend_saves (.+) (.+) (.+)/, onSpendSavesAction);
+  bot.command('pedo_total_duration', onPidorTotalDuration);
   bot.command('pedo_record_duration', onPidorRecordDuration);
 };
