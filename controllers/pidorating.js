@@ -2,15 +2,16 @@ const { Markup } = require('telegraf');
 const chance = require('chance').Chance();
 const model = require('../models/pidorating');
 const { parseDays } = require('../utils');
+const CONST = require('../const');
 
 async function onWhoPidor(ctx) {
-  const calledId = ctx.message.from.id;
+  const callerId = ctx.message.from.id;
   const { id: currentPidorId } = await model.getCurrentPidor();
-  if (currentPidorId !== BigInt(calledId)) {
+  if (currentPidorId !== BigInt(callerId)) {
     if (chance.bool({ likelihood: 50 })) {
-      await model.increasePidorSaves(calledId);
+      await model.increasePidorSaves(callerId);
     } else {
-      await model.updateTotalPidorDuration(calledId, 3600000);
+      await model.updateTotalPidorDuration(callerId, CONST.HOUR);
       ctx.reply('ты не удостоенный пидар, лови в ебало +1 час, чмо', { reply_to_message_id: ctx.message.message_id });
       return;
     }
@@ -73,35 +74,43 @@ async function onPidorSaves(ctx) {
 }
 
 async function onSpendSaves(ctx) {
-  const calledId = ctx.message.from.id;
+  const callerId = ctx.message.from.id;
   const pidors = await model.getAllPidors();
-  const { name } = pidors.find(p => p.id === BigInt(calledId));
+  const { name: callerName } = pidors.find(p => p.id === BigInt(callerId));
   const buttons = pidors
-    .filter(p => p.id !== BigInt(calledId))
-    .map(p => Markup.button.callback(p.name, `spend_saves ${calledId} ${p.id} ${p.name}`));
+    .filter(p => p.id !== BigInt(callerId))
+    .map(p => Markup.button.callback(p.name, `spend_saves ${callerId} ${callerName} ${p.id} ${p.name}`));
 
   ctx.reply(
-    `<b>${name}</b> хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
+    `<b>${callerName}</b> хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
     { parse_mode: 'HTML', ...Markup.inlineKeyboard(buttons, { columns: 2 }) },
   );
 }
 
 async function onSpendSavesAction(ctx) {
+  const pidors = await model.getAllPidors();
   const callerId = ctx.from.id;
+  const { name: callerName } = pidors.find(p => p.id === BigInt(callerId));
   const keyboardOwnerId = Number(ctx.match[1]);
-  const chosenPidorId = Number(ctx.match[2]);
-  const chosenPidorName = ctx.match[3];
+  const keyboardOwnerName = ctx.match[2];
+  const chosenPidorId = Number(ctx.match[3]);
+  const chosenPidorName = ctx.match[4];
 
   if (callerId !== keyboardOwnerId) {
-    const msg = ['чмо', 'уебан', 'хуесос', 'долбоеб'];
-    ctx.answerCbQuery(`это не твои кнопки, ${msg[chance.integer({ min: 1, max: msg.length - 1 })]}`);
+    ctx.reply(
+      `<b>${callerName}</>, ${CONST.offenceMessages[chance.integer({ min: 0, max: CONST.offenceMessages.length - 1 })]}`,
+      { parse_mode: 'HTML' },
+    );
   } else {
     if (chance.bool({ likelihood: 50 })) {
-      ctx.reply(`<b>${chosenPidorName}</b> возможно получил бы час если бы эта фича работала`, { parse_mode: 'HTML' });
+      ctx.reply(`<b>${chosenPidorName}</b> в крысу получил +1 час от <b>${keyboardOwnerName}</b>`, { parse_mode: 'HTML' });
+      await model.updateTotalPidorDuration(chosenPidorId, CONST.HOUR);
     } else {
       ctx.reply('неудача, лови в ебало +1 час, крыса');
+      await model.updateTotalPidorDuration(keyboardOwnerId, CONST.HOUR);
     }
   }
+  ctx.answerCbQuery();
 }
 
 async function onPidorRecordDuration(ctx) {
@@ -151,7 +160,7 @@ module.exports = (bot) => {
   bot.command('rating', onPidorRating);
   bot.command('saves', onPidorSaves);
   bot.command('spend_saves', onSpendSaves);
-  bot.action(/spend_saves (.+) (.+) (.+)/, onSpendSavesAction);
+  bot.action(/spend_saves (.+) (.+) (.+) (.+)/, onSpendSavesAction);
   bot.command('total_duration', onPidorTotalDuration);
   bot.command('record_duration', onPidorRecordDuration);
 };
