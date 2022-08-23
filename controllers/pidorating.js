@@ -6,7 +6,7 @@ async function onWhoPidor(ctx) {
   const { id } = await model.getCurrentPidor();
   if (id !== BigInt(ctx.message.from.id)) {
     if (chance.bool({ likelihood: 50 })) {
-      await model.updatePidorSaves(ctx.message.from.id);
+      await model.increasePidorSaves(ctx.message.from.id);
     } else {
       await model.updateTotalPidorDuration(ctx.message.from.id, 3600000);
       return ctx.reply('ты не последний пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
@@ -17,7 +17,7 @@ async function onWhoPidor(ctx) {
   const i = chance.integer({ min: 0, max: pidors.length - 1 });
   ctx.reply(pidors[i].name, { reply_to_message_id: ctx.message.message_id });
   await syncPidorDurations({ updateTotal: true });
-  await model.updatePidorCounter(pidors[i].name);
+  await model.increasePidorCounter(pidors[i].name);
   await model.updateCurrentPidor(pidors[i].name, pidors[i].id);
 }
 

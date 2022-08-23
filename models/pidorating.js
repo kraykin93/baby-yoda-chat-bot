@@ -5,21 +5,25 @@ async function getAllPidors() {
   return pidors;
 }
 
-async function updatePidorCounter(name) {
-  await db.query(`UPDATE public.rating SET counter = counter + 1 WHERE name = '${name}';`);
+async function increasePidorCounter(id) {
+  await db.query(`UPDATE public.rating SET counter = counter + 1 WHERE id = '${id}';`);
 }
 
-async function updatePidorSaves(id) {
+async function increasePidorSaves(id) {
   await db.query(`UPDATE public.rating SET saves = saves + 1 WHERE id = '${id}';`);
 }
 
+async function decreasePidorSaves(id) {
+  await db.query(`UPDATE public.rating SET saves = saves - 1 WHERE id = '${id}';`);
+}
+
 async function getCurrentPidor() {
-  const { rows } = await db.query('SELECT * FROM public.current INNER JOIN public.rating ON public.current.name=public.rating.name;');
+  const { rows } = await db.query('SELECT * FROM public.current INNER JOIN public.rating ON public.current.id=public.rating.id;');
   return rows[0];
 }
 
-async function updateCurrentPidor(name, id) {
-  await db.query(`UPDATE public.current SET id = '${id}', name = '${name}', start_date = '${Date.now()}';`);
+async function updateCurrentPidor(id) {
+  await db.query(`UPDATE public.current SET id = '${id}', start_date = '${Date.now()}';`);
 }
 
 async function updateRecordPidorDuration(id, time) {
@@ -32,8 +36,9 @@ async function updateTotalPidorDuration(id, time) {
 
 module.exports = {
   getAllPidors,
-  updatePidorCounter,
-  updatePidorSaves,
+  increasePidorCounter,
+  increasePidorSaves,
+  decreasePidorSaves,
   updateCurrentPidor,
   getCurrentPidor,
   updateRecordPidorDuration,
