@@ -11,7 +11,7 @@ async function onWhoPidor(ctx) {
       await model.increasePidorSaves(calledId);
     } else {
       await model.updateTotalPidorDuration(calledId, 3600000);
-      ctx.reply('ты не удостоенный пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
+      ctx.reply('ты не удостоенный пидар, лови в ебало +1 час, чмо', { reply_to_message_id: ctx.message.message_id });
       return;
     }
   }
@@ -28,6 +28,7 @@ async function onWhoRat(ctx) {
   let pidors = await model.getAllPidors();
   pidors = pidors.sort((a, b) => b.saves - a.saves);
   let name = 'ты';
+
   if (chance.bool({ likelihood: 75 })) {
     name = pidors[chance.integer({ min: 4, max: 5 })].name;
   } else if (chance.bool({ likelihood: 50 })) {
@@ -35,7 +36,12 @@ async function onWhoRat(ctx) {
   } else if (chance.bool({ likelihood: 25 })) {
     name = pidors[0].name;
   }
-  ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
+
+  ctx.reply(
+    `<b>${name}</b> крыса`,
+    { parse_mode: 'HTML' },
+    { reply_to_message_id: ctx.message.message_id },
+  );
 }
 
 async function onBotPidor(ctx) {
@@ -44,23 +50,26 @@ async function onBotPidor(ctx) {
 
 async function onCurrentPidor(ctx) {
   const { name, currentDuration } = await syncPidorDurations();
-  ctx.reply(`*${name}* удостоен быть пидором уже${parseDays(Number(currentDuration))}`, { parse_mode: 'MarkdownV2' });
+  ctx.reply(
+    `<b>${name}</b> удостоен быть пидором уже${parseDays(Number(currentDuration))}`,
+    { parse_mode: 'HTML' },
+  );
 }
 
 async function onPidorRating(ctx) {
   const pidors = await model.getAllPidors();
-  const msg = '__Рейтинг__' + pidors
+  const msg = '<u>Рейтинг</u>' + pidors
     .sort((a, b) => b.counter - a.counter)
-    .reduce((prev, current) => prev.concat('\n', `*${current.name}*: ${current.counter}`), '');
-  ctx.reply(msg, { parse_mode: 'MarkdownV2' });
+    .reduce((prev, current) => prev.concat('\n', `<b>${current.name}</b>: ${current.counter}`), '');
+  ctx.reply(msg, { parse_mode: 'HTML' });
 }
 
 async function onPidorSaves(ctx) {
   const pidors = await model.getAllPidors();
-  const msg = '__Рейтинг спасений__' + pidors
+  const msg = '<u>Рейтинг спасений</u>' + pidors
     .sort((a, b) => b.saves - a.saves)
-    .reduce((prev, current) => prev.concat('\n', `*${current.name}*: ${current.saves}`), '');
-  ctx.reply(msg, { parse_mode: 'MarkdownV2' });
+    .reduce((prev, current) => prev.concat('\n', `<b>${current.name}</b>: ${current.saves}`), '');
+  ctx.reply(msg, { parse_mode: 'HTML' });
 }
 
 async function onSpendSaves(ctx) {
@@ -71,39 +80,43 @@ async function onSpendSaves(ctx) {
     .filter(p => p.id !== BigInt(calledId))
     .map(p => Markup.button.callback(p.name, `spend_saves ${calledId} ${p.id} ${p.name}`));
 
-  ctx.reply(`${name} хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
-    Markup
-      .inlineKeyboard(buttons, { columns: 2 }),
+  ctx.reply(
+    `<b>${name}</b> хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
+    { parse_mode: 'HTML', ...Markup.inlineKeyboard(buttons, { columns: 2 }) },
   );
 }
 
 async function onSpendSavesAction(ctx) {
   const callerId = ctx.from.id;
-  const keyboardOwner = Number(ctx.match[1]);
-  const pidorId = Number(ctx.match[2]);
-  const pidorName = ctx.match[3];
+  const keyboardOwnerId = Number(ctx.match[1]);
+  const chosenPidorId = Number(ctx.match[2]);
+  const chosenPidorName = ctx.match[3];
 
-  if (callerId !== keyboardOwner) {
+  if (callerId !== keyboardOwnerId) {
     const msg = ['чмо', 'уебан', 'хуесос', 'долбоеб'];
     ctx.answerCbQuery(`это не твои кнопки, ${msg[chance.integer({ min: 1, max: msg.length - 1 })]}`);
   } else {
-    ctx.reply(`${pidorName} возможно получил бы час если бы эта фича работала`, { parse_mode: 'MarkdownV2' });
+    if (chance.bool({ likelihood: 50 })) {
+      ctx.reply(`<b>${chosenPidorName}</b> возможно получил бы час если бы эта фича работала`, { parse_mode: 'HTML' });
+    } else {
+      ctx.reply('неудача, лови в ебало +1 час, крыса');
+    }
   }
 }
 
 async function onPidorRecordDuration(ctx) {
   await syncPidorDurations();
   const pidors = await model.getAllPidors();
-  const msg = '__Рекордное время__' + pidors
+  const msg = '<u>Рекордное время</u>' + pidors
     .sort((a, b) => Number(b.record_duration - a.record_duration))
-    .reduce((prev, current) => prev.concat('\n', `*${current.name}:*${parseDays(Number(current.record_duration))}`), '');
-  ctx.reply(msg, { parse_mode: 'MarkdownV2' });
+    .reduce((prev, current) => prev.concat('\n', `<b>${current.name}:</b>${parseDays(Number(current.record_duration))}`), '');
+  ctx.reply(msg, { parse_mode: 'HTML' });
 }
 
 async function onPidorTotalDuration(ctx) {
   const { name, currentDuration } = await syncPidorDurations();
   const pidors = await model.getAllPidors();
-  const msg = '__Время в тотале__' + pidors
+  const msg = '<u>Время в тотале</u>' + pidors
     .map((pidor) => {
       if (pidor.name === name) {
         pidor.total_duration += currentDuration;
@@ -111,8 +124,8 @@ async function onPidorTotalDuration(ctx) {
       return pidor;
     })
     .sort((a, b) => Number(b.total_duration - a.total_duration))
-    .reduce((prev, current) => prev.concat('\n', `*${current.name}:*${parseDays(Number(current.total_duration))}`), '');
-  ctx.reply(msg, { parse_mode: 'MarkdownV2' });
+    .reduce((prev, current) => prev.concat('\n', `<b>${current.name}:</b>${parseDays(Number(current.total_duration))}`), '');
+  ctx.reply(msg, { parse_mode: 'HTML' });
 }
 
 async function syncPidorDurations({ updateTotal } = {}) {
