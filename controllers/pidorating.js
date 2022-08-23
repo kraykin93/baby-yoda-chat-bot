@@ -69,7 +69,7 @@ async function onSpendSaves(ctx) {
   const { name } = pidors.find(p => p.id === BigInt(calledId));
   const buttons = pidors
     .filter(p => p.id !== BigInt(calledId))
-    .map(p => Markup.button.callback(p.name, `pedo_spend_saves ${calledId} ${p.id} ${p.name}`));
+    .map(p => Markup.button.callback(p.name, `spend_saves ${calledId} ${p.id} ${p.name}`));
 
   ctx.reply(`${name} хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
     Markup
@@ -134,11 +134,11 @@ module.exports = (bot) => {
   bot.hears(/кто пидар|кто пидор|кто пидрила|кто педор/i, onWhoPidor);
   bot.hears(/кто крыса/i, onWhoRat);
   bot.hears(/бот пидар|пидар бот/i, onBotPidor);
-  bot.command('pedo_current', onCurrentPidor);
-  bot.command('pedo_rating', onPidorRating);
-  bot.command('pedo_saves', onPidorSaves);
-  bot.command('pedo_spend_saves', onSpendSaves);
-  bot.action(/pedo_spend_saves (.+) (.+) (.+)/, onSpendSavesAction);
-  bot.command('pedo_total_duration', onPidorTotalDuration);
-  bot.command('pedo_record_duration', onPidorRecordDuration);
+  bot.command('current', onCurrentPidor);
+  bot.command('rating', onPidorRating);
+  bot.command('saves', onPidorSaves);
+  bot.command('spend_saves', onSpendSaves);
+  bot.action(/spend_saves (.+) (.+) (.+)/, onSpendSavesAction);
+  bot.command('total_duration', onPidorTotalDuration);
+  bot.command('record_duration', onPidorRecordDuration);
 };
