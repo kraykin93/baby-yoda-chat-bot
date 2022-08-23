@@ -3,13 +3,15 @@ const model = require('../models/pidorating');
 const { parseDays } = require('../utils');
 
 async function onWhoPidor(ctx) {
-  const { id } = await model.getCurrentPidor();
-  if (id !== BigInt(ctx.message.from.id)) {
+  const calledId = ctx.message.from.id;
+  const { id: currentPidorId } = await model.getCurrentPidor();
+  if (currentPidorId !== BigInt(calledId)) {
     if (chance.bool({ likelihood: 50 })) {
-      await model.increasePidorSaves(ctx.message.from.id);
+      await model.increasePidorSaves(calledId);
     } else {
-      await model.updateTotalPidorDuration(ctx.message.from.id, 3600000);
-      return ctx.reply('ты не последний пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
+      await model.updateTotalPidorDuration(calledId, 3600000);
+      ctx.reply('ты не удостоенный пидар, лови в ебало +1 час чмо', { reply_to_message_id: ctx.message.message_id });
+      return;
     }
   }
 
@@ -21,8 +23,27 @@ async function onWhoPidor(ctx) {
   await model.updateCurrentPidor(pidors[i].name, pidors[i].id);
 }
 
+async function onWhoRat(ctx) {
+  let pidors = await model.getAllPidors();
+  pidors = pidors.sort((a, b) => b.saves - a.saves);
+  let name = 'ты';
+  if (chance.bool({ likelihood: 75 })) {
+    name = pidors[chance.integer({ min: 4, max: 5 })].name;
+  } else if (chance.bool({ likelihood: 50 })) {
+    name = pidors[chance.integer({ min: 1, max: 3 })].name;
+  } else if (chance.bool({ likelihood: 25 })) {
+    name = pidors[0].name;
+  }
+  ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
+}
+
 async function onBotPidor(ctx) {
   ctx.reply('сам пидор', { reply_to_message_id: ctx.message.message_id });
+}
+
+async function onCurrentPidor(ctx) {
+  const { name, currentDuration } = await syncPidorDurations();
+  ctx.reply(`*${name}* удостоен быть пидором уже${parseDays(Number(currentDuration))}`, { parse_mode: 'MarkdownV2' });
 }
 
 async function onPidorRating(ctx) {
@@ -65,11 +86,6 @@ async function onPidorTotalDuration(ctx) {
   ctx.reply(msg, { parse_mode: 'MarkdownV2' });
 }
 
-async function onCurrentPidor(ctx) {
-  const { name, currentDuration } = await syncPidorDurations();
-  ctx.reply(`*${name}* удостоен быть пидором уже${parseDays(Number(currentDuration))}`, { parse_mode: 'MarkdownV2' });
-}
-
 async function syncPidorDurations({ updateTotal } = {}) {
   const { id, name, start_date, record_duration } = await model.getCurrentPidor();
   const currentDuration = BigInt(Date.now()) - start_date;
@@ -85,24 +101,10 @@ async function syncPidorDurations({ updateTotal } = {}) {
   return { name, currentDuration };
 }
 
-async function onWhoRat(ctx) {
-  let pidors = await model.getAllPidors();
-  pidors = pidors.sort((a, b) => b.saves - a.saves);
-  let name = 'ты крыса';
-  if (chance.bool({ likelihood: 75 })) {
-    name = pidors[chance.integer({ min: 4, max: 5 })].name;
-  } else if (chance.bool({ likelihood: 50 })) {
-    name = pidors[chance.integer({ min: 1, max: 3 })].name;
-  } else if (chance.bool({ likelihood: 25 })) {
-    name = pidors[0].name;
-  }
-  ctx.reply(`${name} крыса`, { reply_to_message_id: ctx.message.message_id });
-}
-
 module.exports = (bot) => {
   bot.hears(/кто пидар|кто пидор|кто пидрила|кто педор/i, onWhoPidor);
-  bot.hears(/бот пидар|пидар бот/i, onBotPidor);
   bot.hears(/кто крыса/i, onWhoRat);
+  bot.hears(/бот пидар|пидар бот/i, onBotPidor);
   bot.command('pedo_current', onCurrentPidor);
   bot.command('pedo_rating', onPidorRating);
   bot.command('pedo_total_duration', onPidorTotalDuration);
