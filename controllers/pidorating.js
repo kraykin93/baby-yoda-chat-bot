@@ -7,7 +7,7 @@ const CONST = require('../const');
 async function onWhoPidor(ctx) {
   const callerId = ctx.message.from.id;
   const { id: currentPidorId } = await model.getCurrentPidor();
-  if (currentPidorId !== BigInt(callerId)) {
+  if (currentPidorId !== callerId) {
     if (chance.bool({ likelihood: 50 })) {
       await model.increasePidorSaves(callerId);
     } else {
@@ -76,9 +76,9 @@ async function onPidorSaves(ctx) {
 async function onSpendSaves(ctx) {
   const callerId = ctx.message.from.id;
   const pidors = await model.getAllPidors();
-  const { name: callerName } = pidors.find(p => p.id === BigInt(callerId));
+  const { name: callerName } = pidors.find(p => p.id === callerId);
   const buttons = pidors
-    .filter(p => p.id !== BigInt(callerId))
+    .filter(p => p.id !== callerId)
     .map(p => Markup.button.callback(p.name, `spend_saves ${callerId} ${callerName} ${p.id} ${p.name}`));
 
   ctx.reply(
@@ -90,7 +90,7 @@ async function onSpendSaves(ctx) {
 async function onSpendSavesAction(ctx) {
   const pidors = await model.getAllPidors();
   const callerId = ctx.from.id;
-  const { name: callerName } = pidors.find(p => p.id === BigInt(callerId));
+  const { name: callerName } = pidors.find(p => p.id === callerId);
   const keyboardOwnerId = Number(ctx.match[1]);
   const keyboardOwnerName = ctx.match[2];
   const chosenPidorId = Number(ctx.match[3]);
@@ -109,6 +109,8 @@ async function onSpendSavesAction(ctx) {
       ctx.reply('неудача, лови в ебало +1 час, крыса');
       await model.updateTotalPidorDuration(keyboardOwnerId, CONST.HOUR);
     }
+
+    await model.decreasePidorSaves(keyboardOwnerId);
   }
   ctx.answerCbQuery();
 }
@@ -139,7 +141,7 @@ async function onPidorTotalDuration(ctx) {
 
 async function syncPidorDurations({ updateTotal } = {}) {
   const { id, name, start_date, record_duration } = await model.getCurrentPidor();
-  const currentDuration = BigInt(Date.now()) - start_date;
+  const currentDuration = Date.now() - start_date;
 
   if (record_duration < currentDuration) {
     await model.updateRecordPidorDuration(id, currentDuration);
