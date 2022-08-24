@@ -107,14 +107,15 @@ async function onSpendSavesAction(ctx) {
         ctx.reply(`<b>${chosenPidorName}</b> в крысу получил +1 час от <b>${keyboardOwnerName}</b>`, { parse_mode: 'HTML' });
         await model.updateTotalPidorDuration(chosenPidorId, CONST.HOUR);
       } else {
-        ctx.reply('неудача, лови в ебало +1 час, крыса');
+        ctx.reply(`<b>${keyboardOwnerName}</b>, ты сам крыса, лови в ебало +1 час`, { parse_mode: 'HTML' });
         await model.updateTotalPidorDuration(keyboardOwnerId, CONST.HOUR);
       }
+
+      await model.decreasePidorSaves(keyboardOwnerId);
     } else {
       ctx.reply('<b>${chosenPidorName}</b>, ты даун, следи за валютой', { parse_mode: 'HTML' });
     }
 
-    await model.decreasePidorSaves(keyboardOwnerId);
   }
   ctx.answerCbQuery();
 }
