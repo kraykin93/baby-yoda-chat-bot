@@ -79,7 +79,7 @@ async function onSpendSaves(ctx) {
   const { name: callerName } = pidors.find(p => p.id === callerId);
   const buttons = pidors
     .filter(p => p.id !== callerId)
-    .map(p => Markup.button.callback(p.name, `spend_saves ${callerId} ${callerName} ${p.id} ${p.name}`));
+    .map(p => Markup.button.callback(p.name, `spend_saves ${callerId} ${p.id} ${p.name}`));
 
   ctx.reply(
     `<b>${callerName}</b> хочет попытаться добавить кому-то час, давайте похлопаем этой крысе`,
@@ -92,9 +92,9 @@ async function onSpendSavesAction(ctx) {
   const callerId = ctx.from.id;
   const { name: callerName } = pidors.find(p => p.id === callerId);
   const keyboardOwnerId = Number(ctx.match[1]);
-  const keyboardOwnerName = ctx.match[2];
-  const chosenPidorId = Number(ctx.match[3]);
-  const chosenPidorName = ctx.match[4];
+  const { name: keyboardOwnerName, saves } = pidors.find(p => p.id === keyboardOwnerId);
+  const chosenPidorId = Number(ctx.match[2]);
+  const chosenPidorName = ctx.match[3];
 
   if (callerId !== keyboardOwnerId) {
     ctx.reply(
@@ -102,12 +102,16 @@ async function onSpendSavesAction(ctx) {
       { parse_mode: 'HTML' },
     );
   } else {
-    if (chance.bool({ likelihood: 50 })) {
-      ctx.reply(`<b>${chosenPidorName}</b> в крысу получил +1 час от <b>${keyboardOwnerName}</b>`, { parse_mode: 'HTML' });
-      await model.updateTotalPidorDuration(chosenPidorId, CONST.HOUR);
+    if (saves > 0) {
+      if (chance.bool({ likelihood: 50 })) {
+        ctx.reply(`<b>${chosenPidorName}</b> в крысу получил +1 час от <b>${keyboardOwnerName}</b>`, { parse_mode: 'HTML' });
+        await model.updateTotalPidorDuration(chosenPidorId, CONST.HOUR);
+      } else {
+        ctx.reply('неудача, лови в ебало +1 час, крыса');
+        await model.updateTotalPidorDuration(keyboardOwnerId, CONST.HOUR);
+      }
     } else {
-      ctx.reply('неудача, лови в ебало +1 час, крыса');
-      await model.updateTotalPidorDuration(keyboardOwnerId, CONST.HOUR);
+      ctx.reply('<b>${chosenPidorName}</b>, ты даун, следи за валютой', { parse_mode: 'HTML' });
     }
 
     await model.decreasePidorSaves(keyboardOwnerId);
@@ -162,7 +166,7 @@ module.exports = (bot) => {
   bot.command('rating', onPidorRating);
   bot.command('saves', onPidorSaves);
   bot.command('spend_saves', onSpendSaves);
-  bot.action(/spend_saves (.+) (.+) (.+) (.+)/, onSpendSavesAction);
+  bot.action(/spend_saves (.+) (.+) (.+)/, onSpendSavesAction);
   bot.command('total_duration', onPidorTotalDuration);
   bot.command('record_duration', onPidorRecordDuration);
 };
