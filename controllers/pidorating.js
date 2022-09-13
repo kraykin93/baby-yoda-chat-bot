@@ -113,7 +113,7 @@ async function onSpendSavesAction(ctx) {
 
       await model.decreasePidorSaves(keyboardOwnerId);
     } else {
-      ctx.reply(`<b>${chosenPidorName}</b>, ты даун, следи за валютой`, { parse_mode: 'HTML' });
+      ctx.reply(`<b>${keyboardOwnerName}</b>, ты даун, следи за валютой`, { parse_mode: 'HTML' });
     }
 
   }
